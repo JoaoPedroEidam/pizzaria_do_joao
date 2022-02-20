@@ -11,8 +11,16 @@ class Pedido extends Model
 
     protected $fillable = [
         'status',
-        'produto_id'
+        'pedido_id',
+        'numero_pedido',
+        'realizacao_pedido'
     ];
 
-    public $timestamps = false;
+    public function produto(){
+        return $this->hasOne(Produto::class);
+    }
+
+    public function usuario(){
+        return $this->hasOne(User::class);
+    }
 }

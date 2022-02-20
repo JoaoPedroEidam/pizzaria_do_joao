@@ -16,7 +16,10 @@ class CreatePedido extends Migration
         Schema::create('pedidos', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('status');
+            $table->integer('numero_pedido');
+            $table->dateTime('realizacao_pedido');
             $table->foreignId('pedido_id')->nullable()->references('id')->on('pedidos');
+            $table->foreignId('user')->nullable()->references('id')->on('users');
         });
     }
 

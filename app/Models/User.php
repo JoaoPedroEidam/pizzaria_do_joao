@@ -24,6 +24,10 @@ class User extends Authenticatable
         'tipoUsuario'
     ];
 
+    public function pedidos(){
+        return $this->hasMany(Pedido::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

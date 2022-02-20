@@ -18,6 +18,11 @@ class PedidoController extends Controller
         return view('pedido.index', compact('produtos'));
     }
 
+    public function controle(){
+        $pedido = Pedido::all()->orderBy("numero_pedido", "desc");
+        return view('pedido.index', compact('produtos'));
+    }
+
     /**
      * Show the form for creating a new resource.
      *

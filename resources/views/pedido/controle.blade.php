@@ -17,7 +17,7 @@
 
     <main role="main">
         <div class="row">
-            <div class="container  col-sm-8 offset-md-2">
+            <div class="container">
 
                 <div class="card border">
                     <div class="card-header">

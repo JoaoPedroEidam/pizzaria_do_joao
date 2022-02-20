@@ -19,4 +19,8 @@ class Produto extends Model
 
     public $timestamps = false;
 
+    public function pedidos(){
+        return $this->hasMany(Pedido::class);
+    }
+
 }

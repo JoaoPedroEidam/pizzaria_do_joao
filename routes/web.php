@@ -13,9 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/controle', [App\Http\Controllers\PedidoController::class, 'controle'])->name("tela_controle");
 
 Route::resource('produto', App\Http\Controllers\ProdutoController::class);
 Route::resource('user', App\Http\Controllers\UserController::class);

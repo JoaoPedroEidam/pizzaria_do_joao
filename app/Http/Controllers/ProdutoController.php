@@ -106,8 +106,7 @@ class ProdutoController extends Controller
         $regras = [
             'nome'  => 'required|min:3|max:80',
             'preco' => 'required|min:0',
-            'descricao' => 'required|min:1|max:250',
-            'arquivo' => 'required'
+            'descricao' => 'required|min:1|max:250'
         ];
         $mensagens = [ 
             'nome.required' => 'O nome é requerido.',
@@ -119,16 +118,18 @@ class ProdutoController extends Controller
 
         $request->validate($regras, $mensagens);
 
-        $arquivo = $produto->arquivo;
-        Storage::disk('public')->delete($arquivo);
-
-        $path = $request->file('arquivo')->store('imagens', 'public');
-
+        if($request->file('arquivo') != NULL){
+            $arquivo = $produto->arquivo;
+            Storage::disk('public')->delete($arquivo);
+            $path = $request->file('arquivo')->store('imagens', 'public');
+            $produto->arquivo = $path;
+        }
+       
         $produto->nome = request()->input('nome');
         $produto->preco = request()->input('preco');
         $produto->descricao = request()->input('descricao');
         $produto->like = 0;
-        $produto->arquivo = $path;
+       
         $produto->save();
         return redirect()->route('produto.index');
     }
@@ -141,6 +142,9 @@ class ProdutoController extends Controller
      */
     public function destroy($id)
     {
+        $produto = Produto::findOrFail($id);
+        $arquivo = $produto->arquivo;
+        Storage::disk('public')->delete($arquivo);
         Produto::destroy($id);
         return redirect()->route('produto.index');
     }
