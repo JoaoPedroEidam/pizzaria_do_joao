@@ -23,7 +23,7 @@
                         <h5 class="card-title">Cadastro de Produto</h5>
                     </div>
                     <div class="card-body">
-                        <form action="{{ route('produto.update'), $produto['id'] }}" method="POST"
+                        <form action="{{ route('produto.update', $produto['id']) }}" method="POST"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

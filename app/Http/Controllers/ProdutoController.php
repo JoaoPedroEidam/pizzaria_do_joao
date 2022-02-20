@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\Produto;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ProdutoController extends Controller
 {
@@ -40,7 +41,8 @@ class ProdutoController extends Controller
         $regras = [
             'nome'  => 'required|min:3|max:80',
             'preco' => 'required|min:0',
-            'descricao' => 'required|min:1|max:250'
+            'descricao' => 'required|min:1|max:250',
+            'arquivo' => 'required'
         ];
         $mensagens = [ 
             'nome.required' => 'O nome é requerido.',
@@ -100,6 +102,35 @@ class ProdutoController extends Controller
     public function update(Request $request, $id)
     {
         $produto = Produto::findOrFail($id);
+         
+        $regras = [
+            'nome'  => 'required|min:3|max:80',
+            'preco' => 'required|min:0',
+            'descricao' => 'required|min:1|max:250',
+            'arquivo' => 'required'
+        ];
+        $mensagens = [ 
+            'nome.required' => 'O nome é requerido.',
+            'nome.min' => 'É necessário no mínimo 3 caracteres no nome.',
+            'required' => 'O atributo :attribute não pode estar em branco.',  // Generico
+            'preco.required' => 'Informe o preço.',
+            'descricao.required' => 'Digite uma descrição.'
+        ];
+
+        $request->validate($regras, $mensagens);
+
+        $arquivo = $produto->arquivo;
+        Storage::disk('public')->delete($arquivo);
+
+        $path = $request->file('arquivo')->store('imagens', 'public');
+
+        $produto->nome = request()->input('nome');
+        $produto->preco = request()->input('preco');
+        $produto->descricao = request()->input('descricao');
+        $produto->like = 0;
+        $produto->arquivo = $path;
+        $produto->save();
+        return redirect()->route('produto.index');
     }
 
     /**
