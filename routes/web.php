@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/controle', [App\Http\Controllers\PedidoController::class, 'controle'])->name("tela_controle");
-
+Route::get('/controle', [App\Http\Controllers\PedidoController::class, 'controle'])->name("pedido.controle");
+Route::POST('/pedido/realizar_pedido/{id}', [App\Http\Controllers\PedidoController::class, 'realizar_pedido'])->name("pedido.realizar_pedido");
 Route::resource('produto', App\Http\Controllers\ProdutoController::class);
 Route::resource('user', App\Http\Controllers\UserController::class);
 Route::resource('pedido', App\Http\Controllers\PedidoController::class);

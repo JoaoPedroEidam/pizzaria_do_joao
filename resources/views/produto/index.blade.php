@@ -84,7 +84,7 @@
 
                         <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end">
                             <div class="btn-group">
-                                <a href="{{ route('tela_controle') }}">
+                                <a href="{{ route('pedido.controle') }}">
                                     <button type="button" class="btn btn-outline-secondary">Voltar</button>
                                 </a>
                             </div>

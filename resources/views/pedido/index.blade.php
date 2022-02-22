@@ -71,14 +71,14 @@
     <header>
         <div class="navbar navbar-dark bg-dark shadow-sm">
             <a href="#" class="navbar-brand d-flex align-items-center">
-                <strong>Pizzas</strong>
+                <strong>Menu de Pizzas</strong>
             </a>
         </div>
     </header>
 
     <main role="main">
 
-{{--         <section class="jumbotron text-center">
+        {{-- <section class="jumbotron text-center">
             <div class="container">
                 <h1 class="jumbotron-heading">Realise o pedido</h1>
                 <form method="POST" action="/" enctype="multipart/form-data">
@@ -108,18 +108,22 @@
                                 <img class="card-img-top figure-img img-fluid rounded"
                                     src="/storage/{{ $produto->arquivo }}">
                                 <div class="card-body">
-                                    <p class="card-text">{{ $produto->nome }}</p>
-                                    <p class="card-text">{{ $produto->descricao }}</p>
+                                    <p class="card-text">Nome: {{ $produto->nome }}</p>
+                                    <p class="card-text">Preço: {{ $produto->preco }} reais</p>
+                                    <p class="card-text">Descrição: {{ $produto->descricao }}</p>
+                                    <p class="card-text">Likes: {{ $produto->like }}</p>
+
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group">
                                             <!--button type="button" class="btn btn-sm btn-outline-secondary">Download</button-->
-                                            <a type="button" class="btn btn-sm btn-outline-secondary"
-                                                href="/download/{{ $produto->id }}">Download</a>
-                                            <form action="/{{ $produto->id }}" method="POST">
+                                            <a href="{{ route('pedido.show', $produto->id) }}">
+                                                <button class="btn btn-outline-info btn-sm"
+                                                    title="Informações de: {{ $produto->nome }}"><i>Informações</i></button>
+                                            </a>
+                                            <form action="{{ route('pedido.store') }}" method="POST">
                                                 @csrf
-                                                <input type="hidden" name="_method" value="delete">
-                                                <button type="submit"
-                                                    class="btn btn-sm btn-outline-danger">Apagar</button>
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                <button type="submit" class="bbtn btn-outline-primary"title="Pedir somente uma: {{ $produto->nome }}"><i>Pedir uma</i></button>
                                             </form>
                                         </div>
                                     </div>
@@ -138,7 +142,6 @@
             <p class="float-right">
                 <a href="#">Voltar para cima</a>
             </p>
-            <p>©2018 Sua empresa.com</p>
         </div>
     </footer>
 

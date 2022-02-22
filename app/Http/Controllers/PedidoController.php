@@ -1,9 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Pedido;
 use App\Models\Produto;
+use App\Models\RealizarPedido;
+use App\Models\User;
+use DateTime;
+use DateTimeZone;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PedidoController extends Controller
 {
@@ -18,9 +25,24 @@ class PedidoController extends Controller
         return view('pedido.index', compact('produtos'));
     }
 
-    public function controle(){
-        $pedido = Pedido::all()->orderBy("numero_pedido", "desc");
-        return view('pedido.index', compact('produtos'));
+    public function controle()
+    {
+        /* $pedidos = Pedido::all();
+        $pedido = new RealizarPedido();
+        foreach ($pedidos as $p) {
+            $mesa = User::findOrFail($p->user_id);
+            $pedido->mesa = "rita";
+            $pro = Produto::findOrFail($p->produto_id);
+            $pedido->preco = $pro->preco * $p->quantidade;
+            $pedido->numero_pedido = $p->numero_pedido;
+            $pedido->status = $p->status;
+            $pedido->produto_id = $p->produto_id;
+            $pedido->dataHora = $p->realizacao_pedido;
+            $pedido->save();
+        } */
+        $pedidos = Pedido::all();
+
+        return view('pedido.controle', ['pedidos' => $pedidos]);
     }
 
     /**
@@ -41,7 +63,31 @@ class PedidoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+    }
+
+    public function realizar_pedido(Request $request, $id)
+    {
+        $user = new User();
+        $user->name = "joao";
+        $user->email = "jp@gmail.com";
+        $user->password = "12345678";
+        $user->tipoUsuario = "Adm";
+        $user->save();
+        //$user = Auth::user();
+        $p = Pedido::select("*")->orderBy('numero_pedido', 'desc')->first();
+        $pedido = new Pedido();
+        $pedido->status = "Aquardando Pagamento";
+        if ($p != NULL)
+            $pedido->numero_pedido = 1 + $p->numero_pedido;
+        else $pedido->numero_pedido = 1;
+        $timezone = new DateTimeZone('America/Sao_Paulo');
+        $pedido->realizacao_pedido = new DateTime('now', $timezone);
+        $pedido->quantidade = 1;
+        $pedido->produto_id = $id;
+        $pedido->user_id = $user->id;
+        $pedido->user_id = 1;
+        $pedido->save();
+        return redirect()->route('pedido.controle');
     }
 
     /**
@@ -52,7 +98,9 @@ class PedidoController extends Controller
      */
     public function show($id)
     {
-        //
+        return view('pedido.show', [
+            'produto' => Produto::findOrFail($id)
+        ]);
     }
 
     /**

@@ -17,9 +17,11 @@ class CreatePedido extends Migration
             $table->bigIncrements('id');
             $table->string('status');
             $table->integer('numero_pedido');
+            $table->integer('quantidade');
             $table->dateTime('realizacao_pedido');
-            $table->foreignId('pedido_id')->nullable()->references('id')->on('pedidos');
-            $table->foreignId('user')->nullable()->references('id')->on('users');
+            $table->string('preparo');
+            $table->foreignId('produto_id')->nullable()->references('id')->on('produtos');
+            $table->foreignId('user_id')->nullable()->references('id')->on('users');
         });
     }
 

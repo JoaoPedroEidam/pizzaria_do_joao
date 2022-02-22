@@ -22,13 +22,7 @@
                 <div class="card border">
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-5">
-                                <a href="{{ route('produto.create') }}">
-                                    <button title="Cadastrar um novo produto" type="button"
-                                        class="btn btn-primary">Cadastrar</button>
-                                </a>
-                            </div>
-                            <h5 class="card-title">Cadastro de Produto</h5>
+                            <h5 class="card-title">Pedidos Realizados</h5>
                         </div>
 
                     </div>
@@ -36,20 +30,22 @@
 
                         <table class="table table-bordered table-hover" id="tabelaprodutos">
                             <thead>
-                                <tr >
-                                    <th>Nome</th>
-                                    <th class="text-right">Preço</th>
-                                    <th class="text-right">Like</th>
+                                <tr>
+                                    <th>Nº Pedido</th>
+                                    <th>Quantidade</th>
+                                    <th>Horário</th>
+                                    <th class="text-right">Status</th>
                                     <th width="120">#</th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($produto as $p)
+                                @foreach ($pedidos as $p)
                                     <tr>
-                                        <td>{{ $p->nome }}</td>
-                                        <td class="text-right">{{ $p->preco }}</td>
-                                        <td class="text-right">{{ $p->like }}</td>
+                                        <td>{{ $p->numero_pedido }}</td>                                       
+                                        <td class="text-right">{{ $p->quantidade }}</td>
+                                        <td class="text-right">{{ $p->realizacao_pedido }}</td>
+                                        <td class="text-right">{{ $p->status }}</td>
                                         <th class="text-right">
                                             <div class="row">
                                                 <div class="col-1 col-sm-2">
@@ -65,13 +61,14 @@
                                                     </a>
                                                 </div>
                                                 <div class="col-1">
-                                                <form id="comboForm" action="{{ route('produto.destroy', $p->id) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit"
-                                                        class="btn btn-danger btn-sm" title="Deletar cadastro de: {{ $p->nome }}"><i>D</i></button>
-                                                </form>
+                                                    <form id="comboForm"
+                                                        action="{{ route('produto.destroy', $p->id) }}"
+                                                        method="post">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm"
+                                                            title="Deletar cadastro de: {{ $p->nome }}"><i>D</i></button>
+                                                    </form>
                                                 </div>
                                             </div>
 
@@ -82,17 +79,11 @@
                             </tbody>
                         </table>
 
-                        <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end">
-                            <div class="btn-group">
-                                <a href="{{ route('tela_controle') }}">
-                                    <button type="button" class="btn btn-outline-secondary">Voltar</button>
-                                </a>
-                            </div>
-                        </div>
+
                     </div>
-                   
+
                 </div>
-               
+
 
             </div>
         </div>
