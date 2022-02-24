@@ -120,11 +120,11 @@
                                                 <button class="btn btn-outline-info btn-sm"
                                                     title="Informações de: {{ $produto->nome }}"><i>Informações</i></button>
                                             </a>
-                                            <form action="{{ route('pedido.store') }}" method="POST">
+                                            {{-- <form action="{{ route('pedido.store') }}" method="POST">
                                                 @csrf
                                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                                 <button type="submit" class="bbtn btn-outline-primary"title="Pedir somente uma: {{ $produto->nome }}"><i>Pedir uma</i></button>
-                                            </form>
+                                            </form> --}}
                                         </div>
                                     </div>
                                 </div>

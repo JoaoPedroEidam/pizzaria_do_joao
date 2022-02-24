@@ -21,7 +21,7 @@ class PedidoController extends Controller
      */
     public function index()
     {
-        $produtos = Produto::all();
+        $produtos = Produto::select("*")->orderBy("like", "desc")->get();
         return view('pedido.index', compact('produtos'));
     }
 
@@ -67,13 +67,28 @@ class PedidoController extends Controller
 
     public function realizar_pedido(Request $request, $id)
     {
-        $user = new User();
-        $user->name = "joao";
-        $user->email = "jp@gmail.com";
-        $user->password = "12345678";
-        $user->tipoUsuario = "Adm";
-        $user->save();
-        //$user = Auth::user();
+       
+        /*     $user = new User();
+            $user->name = "Mesa_1";
+            $user->email = "mesa_1@gmail.com";
+            $user->password = "12345678";
+            $user->tipoUsuario = "mesa";
+            $user->save();
+            $user = new User();
+            $user->name = "Mesa_2";
+            $user->email = "mesa_2@gmail.com";
+            $user->password = "12345678";
+            $user->tipoUsuario = "mesa";
+            $user->save();
+            $user = new User();
+            $user->name = "João";
+            $user->email = "joao@gmail.com";
+            $user->password = "12345678";
+            $user->tipoUsuario = "gerente";
+            $user->save(); */
+        
+
+        $user = User::select("*")->where('tipoUsuario', 'mesa')->first();
         $p = Pedido::select("*")->orderBy('numero_pedido', 'desc')->first();
         $pedido = new Pedido();
         $pedido->status = "Aquardando Pagamento";
@@ -82,12 +97,18 @@ class PedidoController extends Controller
         else $pedido->numero_pedido = 1;
         $timezone = new DateTimeZone('America/Sao_Paulo');
         $pedido->realizacao_pedido = new DateTime('now', $timezone);
-        $pedido->quantidade = 1;
+        $pedido->quantidade = request()->input('quantidade');;
         $pedido->produto_id = $id;
-        $pedido->user_id = $user->id;
         $pedido->user_id = 1;
+        $pedido->user_id = 1;
+        $pedido->preparo = "Aguardando";
         $pedido->save();
-        return redirect()->route('pedido.controle');
+        $produto = Produto::findOrFail($id);
+        $produto->like = request()->input('vallike');;
+        $produto->save();
+        $mensagem = "O pedido está em preparo! Aguarde que o pedido vai chegar na sua mesa. Obrigado.";
+        return view('pedido.informe', ['mensagem' => $mensagem]);
+        //return redirect()->route('pedido.index')->with('success', "Pedido realizado com sucesso!");;
     }
 
     /**

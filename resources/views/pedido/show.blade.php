@@ -72,38 +72,50 @@
         <div class="row ">
             <div class="container align-self-center ">
                 <div class="card" style="width: 40rem;">
-                    <img class="card-img-top figure-img img-fluid rounded" src="/storage/{{ $produto->arquivo }}">
-                    <div class="card-body">
-                        <p class="card-text">Nome: {{ $produto->nome }}</p>
-                        <p class="card-text">Preço: {{ $produto->preco }} reais</p>
-                        <p class="card-text">Descrição: {{ $produto->descricao }}</p>
-                        <p class="card-text">Likes: {{ $produto->like }}</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <form action="{{ route('pedido.realizar_pedido' , $produto['id']) }}" method="POST">
-                                @csrf
-                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                <button type="submit" class="bbtn btn-outline-primary"
-                                    title="Pedir : {{ $produto->nome }}"><i>Realizar Pedido</i></button>
-                            </form>
-                            <div class="row " >
-                                <div class="col-4">
-                                    <label>Quantidade:</label>
+                    <form action="{{ route('pedido.realizar_pedido', $produto['id']) }}" method="POST">
+                        @csrf
+                        <img class="card-img-top figure-img img-fluid rounded" src="/storage/{{ $produto->arquivo }}">
+                        <div class="card-body">
+                            <p class="card-text">Nome: {{ $produto->nome }}</p>
+                            <p class="card-text">Preço: {{ $produto->preco }} reais</p>
+                            <p class="card-text">Descrição: {{ $produto->descricao }}</p>
+                            <div class="row">
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-outline-success" id="btlike">Like</button>
                                 </div>
-                                <button type="button" class="btn btn-outline-success" id="btnS">+</button>
-                                <div class="col-3">
-                                    <input readonly="true" type="number" class="form-control" name="quantidade" id="quantidade"
-                                         title="Quantidade de pizzas tem que ser maior que 0" value="1"
-                                        min="1">
+                                <div class="col-2">
+                                    <input readonly="true" type="number" class="form-control" name="vallike"
+                                        id="vallike" value="{{ $produto->like }}">
                                 </div>
-                                <button type="button" class="btn btn-outline-success" id="btnD">-</button>
                             </div>
-                            <div class="btn-group">
-                                <a href="{{ route('pedido.index') }}">
-                                    <button type="button" class="btn btn-outline-secondary">Voltar</button>
-                                </a>
+                            <br>
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="btn btn-outline-primary"
+                                    title="Pedir : {{ $produto->nome }}"><i>Realizar Pedido</i></button>
+
+                                <div class="row ">
+                                    <div class="col-4">
+                                        <h3> </h3>
+                                        <label> Quantidade:</label>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-success" id="btnS">+</button>
+                                    <div class="col-3">
+                                        <input readonly="true" type="number" class="form-control" name="quantidade"
+                                            id="quantidade" title="Quantidade de pizzas tem que ser maior que 0"
+                                            value="1" min="1">
+                                    </div>
+                                    <button type="button" class="btn btn-outline-success" id="btnD">-</button>
+                                </div>
+                                <div class="btn-group">
+                                    <a href="{{ route('pedido.index') }}">
+                                        <button type="button" class="btn btn-outline-secondary">Voltar</button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -112,19 +124,32 @@
     </main>
 
 
-    <script  type="text/javascript">
-    
+    <script type="text/javascript">
+        var i = 0;
+
+        btlike.addEventListener('click', function() {
+            if (i == 0) {
+                var s1 = document.getElementById("vallike").value;
+                document.getElementById('vallike').value = Number(s1) + Number(1);
+                i = 1;
+            }else{
+                var s1 = document.getElementById("vallike").value;
+                document.getElementById('vallike').value = Number(s1) - Number(1);
+                i = 0;
+            }
+
+        });
+
         btnS.addEventListener('click', function() {
             var s1 = document.getElementById("quantidade").value;
-            document.getElementById('quantidade').value = Number(s1) + Number(1) ;
+            document.getElementById('quantidade').value = Number(s1) + Number(1);
         });
 
         btnD.addEventListener('click', function() {
             var s1 = document.getElementById("quantidade").value;
-            document.getElementById('quantidade').value = Number(s1) - Number(1)  ;
+            if (Number(s1) >= 2)
+                document.getElementById('quantidade').value = Number(s1) - Number(1);
         });
-
-
     </script>
     <script src="{{ asset('js/app.js') }}" type="text/javascript"> </script>
 </body>
