@@ -143,6 +143,10 @@ class ProdutoController extends Controller
     public function destroy($id)
     {
         $produto = Produto::findOrFail($id);
+        if($produto->pedidos() != NULL){
+        // Não é interessante fazer desta forma, pois perde o historico de pedido 
+        $produto->pedidos()->delete();
+        }
         $arquivo = $produto->arquivo;
         Storage::disk('public')->delete($arquivo);
         Produto::destroy($id);

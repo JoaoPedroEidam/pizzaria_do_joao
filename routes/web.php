@@ -16,21 +16,23 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return redirect()->route('produto.index');;
-});
+})->middleware(['auth']);
 
 Route::POST('/logout', function () {
     Auth::logout();
     return view('auth.login');
 })->name('logout');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/sair', function () {
+    Auth::logout();
+    return view('auth.login');
+})->name('sair');
+
 
 require __DIR__.'/auth.php';
 
-Route::get('/controle', [App\Http\Controllers\PedidoController::class, 'controle'])->name("pedido.controle");
-Route::POST('/pedido/realizar_pedido/{id}', [App\Http\Controllers\PedidoController::class, 'realizar_pedido'])->name("pedido.realizar_pedido");
-Route::resource('produto', App\Http\Controllers\ProdutoController::class);
-Route::resource('user', App\Http\Controllers\UserController::class);
-Route::resource('pedido', App\Http\Controllers\PedidoController::class);
+Route::get('/controle', [App\Http\Controllers\PedidoController::class, 'controle'])->name("pedido.controle")->middleware(['auth']);
+Route::POST('/pedido/realizar_pedido/{id}', [App\Http\Controllers\PedidoController::class, 'realizar_pedido'])->name("pedido.realizar_pedido")->middleware(['auth']);
+Route::resource('produto', App\Http\Controllers\ProdutoController::class)->middleware(['auth']);
+Route::resource('user', App\Http\Controllers\UserController::class)->middleware(['auth']);
+Route::resource('pedido', App\Http\Controllers\PedidoController::class)->middleware(['auth']);

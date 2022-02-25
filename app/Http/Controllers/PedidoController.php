@@ -27,20 +27,7 @@ class PedidoController extends Controller
 
     public function controle()
     {
-        /* $pedidos = Pedido::all();
-        $pedido = new RealizarPedido();
-        foreach ($pedidos as $p) {
-            $mesa = User::findOrFail($p->user_id);
-            $pedido->mesa = "rita";
-            $pro = Produto::findOrFail($p->produto_id);
-            $pedido->preco = $pro->preco * $p->quantidade;
-            $pedido->numero_pedido = $p->numero_pedido;
-            $pedido->status = $p->status;
-            $pedido->produto_id = $p->produto_id;
-            $pedido->dataHora = $p->realizacao_pedido;
-            $pedido->save();
-        } */
-        $pedidos = Pedido::all();
+        $pedidos = Pedido::select("*")->orderBy('numero_pedido', 'desc')->get();
 
         return view('pedido.controle', ['pedidos' => $pedidos]);
     }
@@ -104,7 +91,7 @@ class PedidoController extends Controller
         $pedido->preparo = "Aguardando";
         $pedido->save();
         $produto = Produto::findOrFail($id);
-        $produto->like = request()->input('vallike');;
+        $produto->like = request()->input('vallike');
         $produto->save();
         $mensagem = "O pedido está em preparo! Aguarde que o pedido vai chegar na sua mesa. Obrigado.";
         return view('pedido.informe', ['mensagem' => $mensagem]);
@@ -132,7 +119,10 @@ class PedidoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $pedido = Pedido::findOrFail($id);
+        return view('pedido.edit', [
+            'produto' => Produto::findOrFail($pedido->produto_id)
+        ], ['pedido' => $pedido]);
     }
 
     /**
@@ -144,7 +134,11 @@ class PedidoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $pedido = Pedido::findOrFail($id);
+        $pedido->status = request()->input('status');
+        $pedido->preparo = request()->input('preparo');
+        $pedido->save();
+        return redirect()->route('pedido.controle');
     }
 
     /**
